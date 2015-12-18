@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <cstdarg>
+#include "logging_defs.hh"
+
+namespace logging
+{
+    void init_logging()
+    { /* empty */ }
+
+    void set_logging_level(LogLevel L)
+    {
+        log_level = static_cast<int>(L);
+    }
+
+    void logging_impl_function(LogLevel L, const char * format, va_list args)
+    {
+#ifdef COLORED_LOGGING
+        /* NOTE avoid using designated initializers */
+
+        static const char * level_strings[] = {
+            nullptr,
+            nullptr,
+            "\033[1;7;91m CRIT    \033[0m\033[91m >>>\033[0m ",
+            nullptr,
+            "\033[1;7;93m WARNING \033[0m\033[93m >>>\033[0m ",
+            nullptr,
+            "\033[1;7;92m INFO    \033[0m\033[92m >>>\033[0m ",
+            "\033[1;7;95m DEBUG   \033[0m\033[95m >>>\033[0m "
+        };
+#else
+
+        static const char * level_strings[] = {
+            nullptr,
+            nullptr,
+            "[CRIT   ] ",
+            nullptr,
+            "[WARNING] ",
+            nullptr,
+            "[INFO   ] ",
+            "[DEBUG  ] ",
+        };
+
+#endif /* end COLORED_LOGGING */
+
+        /* handle automatic newlings as syslog does */
+        std::fprintf(stderr, "%s", level_strings[L]);
+        std::vfprintf(stderr, format, args);
+        std::fprintf(stderr,"\n");
+    }
+}

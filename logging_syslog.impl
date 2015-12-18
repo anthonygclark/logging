@@ -1,0 +1,49 @@
+extern "C"
+{
+#include <sys/syslog.h>
+}
+
+#include <mutex>
+#include <cstdarg>
+
+#include "logging_defs.hh"
+
+#define xstr(s) str(s)
+#define str(s) #s
+
+#ifndef LOGGING_IDENTIFIER
+#error "LOGGING_IDENTIFIER must be defined. This is a tag for syslog"
+#endif
+
+namespace logging
+{
+    static const char * logging_identifier = xstr(LOGGING_IDENTIFIER);
+
+    void init_logging()
+    {
+        static std::once_flag log_initialized;
+
+        std::call_once(log_initialized, 
+                       [] {
+                            ::openlog(logging_identifier,
+                                      LOG_PERROR | 
+                                      LOG_NOWAIT | 
+                                      LOG_NDELAY | 
+                                      LOG_PID, 0);
+
+                            ::setlogmask(LOG_UPTO(log_level));
+                            write_log<DEBUG>("Syslog Initialized with log level %d", log_level);
+                       });
+    }
+
+    void set_logging_level(LogLevel L)
+    {
+        (void) ::setlogmask(LOG_UPTO(static_cast<int>(L)));
+        log_level = static_cast<int>(L);
+    }
+
+    void logging_impl_function(LogLevel L, const char * format, va_list args)
+    {
+        ::vsyslog(L, format, args);
+    }
+}
