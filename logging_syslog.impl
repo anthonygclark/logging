@@ -38,7 +38,9 @@ namespace logging
 
     void set_logging_level(LogLevel L)
     {
+#if ! defined (LOGGING_COMPILE_TIME)
         (void) ::setlogmask(LOG_UPTO(static_cast<int>(L)));
+#endif
         log_level = static_cast<int>(L);
     }
 
