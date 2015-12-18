@@ -1,15 +1,22 @@
 #include "logging.hh"
 
+namespace
+{
+    /* to avoid including <algorithm> */
+    constexpr int _min(int x, int y)
+    { return (x > y) ?  y : x; }
+}
+
 namespace logging
 {
+    /* Set the default log level unless specified */
 #ifndef DEFAULT_LOG_LEVEL
-#define DEFAULT_LOG_LEVEL 7
+    #define DEFAULT_LOG_LEVEL 7
 #endif
     
-    int log_level = min(LogLevel::LAST, DEFAULT_LOG_LEVEL);
+    int log_level = _min(LogLevel::LAST, DEFAULT_LOG_LEVEL);
 
 #undef DEFAULT_LOG_LEVEL
-
 }
 
 #if defined (LOGGING_SYSLOG)

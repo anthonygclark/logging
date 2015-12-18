@@ -17,8 +17,12 @@ extern "C"
 
 namespace logging
 {
+    /**< Application tag */
     static const char * logging_identifier = xstr(LOGGING_IDENTIFIER);
 
+    /**
+     * @brief Syslog initialization
+     */
     void init_logging()
     {
         static std::once_flag log_initialized;
@@ -36,6 +40,12 @@ namespace logging
                        });
     }
 
+
+    /**
+     * @brief Sets the logging level for syslog
+     * @note Does not effect syslog if compiled with LOGGING_COMPILE_TIME
+     * @param L The log level to set
+     */
     void set_logging_level(LogLevel L)
     {
 #if ! defined (LOGGING_COMPILE_TIME)
@@ -44,8 +54,17 @@ namespace logging
         log_level = static_cast<int>(L);
     }
 
+    /**
+     * @brief Implementation for syslog
+     * @param L The log level
+     * @param format String format
+     * @param args Format args
+     */
     void logging_impl_function(LogLevel L, const char * format, va_list args)
     {
         ::vsyslog(L, format, args);
     }
 }
+
+#undef xstr
+#undef str

@@ -3,12 +3,6 @@
 
 #include <cstdarg>
 
-namespace
-{
-    constexpr int min(int x, int y)
-    { return (x > y) ?  y : x; }
-}
-
 namespace logging
 {
     /* mirrors syslog */
@@ -21,11 +15,8 @@ namespace logging
         LAST    = DEBUG,
     };
     
-
     void init_logging();
-
     void set_logging_level(LogLevel L);
-
     void logging_impl_function(LogLevel L, const char * format, va_list args);
 }
 
