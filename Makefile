@@ -1,21 +1,24 @@
+CXX      = clang++
+CFLAGS   = -I include/logging
+CXXFLAGS = --std=c++11 -Wall -Wextra -Werror
 
-all: ct_syslog rt_syslog ct_stdio rt_stdio
+# default to the max log level
+CPPFLAGS  = -DDEFAULT_LOG_LEVEL=7
 
+# Change this
+CPPFLAGS += -DLOGGING_IDENTIFIER="logging_test"  
 
-ct_syslog: test.cpp
-	clang++ --std=c++11 -ggdb3 *.cpp -DDEFAULT_LOG_LEVEL=6 -DLOGGING_IDENTIFIER="test" -DLOGGING_SYSLOG -DLOGGING_COMPILE_TIME -lpthread -o $@
+SRCS     = src/logging.cpp
+OBJECTS  = obj/logging.o
 
-rt_syslog: test.cpp
-	clang++ --std=c++11 -ggdb3 *.cpp -DDEFAULT_LOG_LEVEL=6 -DLOGGING_IDENTIFIER="test" -DLOGGING_SYSLOG -DLOGGING_RUNTIME -lpthread -o $@
+all:
 
-ct_stdio: test.cpp
-	clang++ --std=c++11 -ggdb3 *.cpp -DDEFAULT_LOG_LEVEL=6 -DLOGGING_COLORED -DLOGGING_STDIO -DLOGGING_COMPILE_TIME -o $@
+prep:
+	@mkdir -p obj
 
-rt_stdio: test.cpp
-	clang++ --std=c++11 -ggdb3 *.cpp -DDEFAULT_LOG_LEVEL=6 -DLOGGING_COLORED -DLOGGING_STDIO -DLOGGING_RUNTIME -o $@
+all: prep $(OBJECTS)
 
-clean:
-	rm -rf rt_stdio*
-	rm -rf ct_stdio*
-	rm -rf rt_syslog*
-	rm -rf ct_syslog*
+obj/%.o : src/%.cpp
+	@echo [CXX ]
+	@$(CXX) $(CXXFLAGS) $(CFLAGS) $< -c -o $@ $(CPPFLAGS)
+

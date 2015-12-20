@@ -7,12 +7,19 @@
 
 namespace logging
 {
+    /**
+     * @brief write_log implementation for runtime logging
+     * @tparam L The logging level to log
+     * @param format The printf-style logging format (implementation defined)
+     * @param ... The printf-style logging arguments (implementation defined)
+     */
     template<enum LogLevel L>
         void write_log(const char * format, ...)
         {
             va_list args;
             va_start(args, format);
 
+            /* simple check against log level */
             if (L > log_level)
             {
                 va_end(args);
@@ -20,7 +27,6 @@ namespace logging
             }
 
             logging_impl_function(L, format, args);
-
             va_end(args);
         }
 }

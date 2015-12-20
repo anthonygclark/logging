@@ -9,18 +9,19 @@ namespace logging
      * @details Does nothing
      */
     void init_logging()
-    { /* empty */ }
+    { 
+        write_log<DEBUG>("STDIO logging Initialized with log level %d",
+                         runtime_log_level);
+    }
 
-    
     /**
      * @brief Sets the logging level
      * @param L The new logging level
      */
     void set_logging_level(LogLevel L)
     {
-        log_level = static_cast<int>(L);
+        runtime_log_level = static_cast<int>(L);
     }
-
 
     /**
      * @brief Implementation for stdio logging
@@ -33,7 +34,9 @@ namespace logging
 #ifdef LOGGING_COLORED
         /* NOTE avoid using designated initializers when using gcc */
 
-        /**< Log/level tags to use when color is enabled */
+        /**< Log/level tags to use when color is enabled 
+         * This needs revisited -ac XXX TODO
+         */
         static const char * level_strings[] = {
             nullptr,
             nullptr,
@@ -59,9 +62,18 @@ namespace logging
 
 #endif /* end LOGGING_COLORED */
 
-        /* handle automatic newlines as syslog does */
         std::fprintf(stderr, "%s", level_strings[L]);
         std::vfprintf(stderr, format, args);
-        std::fprintf(stderr,"\n");
+        
+        auto l = std::strlen(format);
+        
+        /* revisit this -ac XXX TODO */
+        if (l > 0 && format[l-1] != '\n')
+        {
+            /* handle automatic newlines as syslog does */
+            std::fprintf(stderr,"\n");
+        }
     }
 }
+
+// vim: ft=cpp

@@ -12,7 +12,7 @@ extern "C"
 #define str(s) #s
 
 #ifndef LOGGING_IDENTIFIER
-#error "LOGGING_IDENTIFIER must be defined. This is a tag for syslog"
+#error "LOGGING_IDENTIFIER (application tag) must be defined to use syslog"
 #endif
 
 namespace logging
@@ -22,6 +22,7 @@ namespace logging
 
     /**
      * @brief Syslog initialization
+     * @details Writes to stderr and syslog
      */
     void init_logging()
     {
@@ -35,11 +36,11 @@ namespace logging
                                       LOG_NDELAY | 
                                       LOG_PID, 0);
 
-                            ::setlogmask(LOG_UPTO(log_level));
-                            write_log<DEBUG>("Syslog Initialized with log level %d", log_level);
+                            ::setlogmask(LOG_UPTO(runtime_log_level));
+                            write_log<DEBUG>("Syslog Initialized with log level %d",
+                                             runtime_log_level);
                        });
     }
-
 
     /**
      * @brief Sets the logging level for syslog
@@ -51,7 +52,7 @@ namespace logging
 #if ! defined (LOGGING_COMPILE_TIME)
         (void) ::setlogmask(LOG_UPTO(static_cast<int>(L)));
 #endif
-        log_level = static_cast<int>(L);
+        runtime_log_level = static_cast<int>(L);
     }
 
     /**
@@ -68,3 +69,5 @@ namespace logging
 
 #undef xstr
 #undef str
+
+// vim: ft=cpp
