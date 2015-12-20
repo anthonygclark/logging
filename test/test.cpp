@@ -11,14 +11,14 @@ int main(void)
      * LOGGING_COMPILE_TIME is defined as you cannot change the
      * log level when it is compiled in */
 
-    write_log<CRIT>("Log level = %d", log_level);
+    write_log<CRIT>("Log level = %d", runtime_log_level);
     write_log<INFO>("%s test", "INFO");
     write_log<WARNING>("%s test", "WARNING");
     write_log<DEBUG>("%s test", "DEBUG");
 
     set_logging_level(WARNING);
     
-    write_log<CRIT>("Log level = %d", log_level);
+    write_log<CRIT>("Log level = %d", runtime_log_level);
     write_log<INFO>("%s test", "INFO");
     write_log<WARNING>("%s test", "WARNING");
  

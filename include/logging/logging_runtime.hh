@@ -20,7 +20,7 @@ namespace logging
             va_start(args, format);
 
             /* simple check against log level */
-            if (L > log_level)
+            if (L > runtime_log_level)
             {
                 va_end(args);
                 return;

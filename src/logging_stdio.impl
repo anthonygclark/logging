@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdarg>
+#include <cstring>
 #include "logging_defs.hh"
 
 namespace logging
