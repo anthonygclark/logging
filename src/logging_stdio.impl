@@ -1,6 +1,9 @@
 #include <cstdio>
 #include <cstdarg>
 #include <cstring>
+
+#include <unistd.h> /* isatty */
+
 #include "logging_defs.hh"
 
 namespace logging
@@ -32,13 +35,8 @@ namespace logging
      */
     void logging_impl_function(LogLevel L, const char * format, va_list args)
     {
-#ifdef LOGGING_COLORED
         /* NOTE avoid using designated initializers when using gcc */
-
-        /**< Log/level tags to use when color is enabled 
-         * This needs revisited -ac XXX TODO
-         */
-        static const char * level_strings[] = {
+        static const char * level_strings_colored[] = {
             nullptr,
             nullptr,
             "\033[1;0;91m CRIT    \033[0m\033[91m >>>\033[0m ",
@@ -48,8 +46,7 @@ namespace logging
             "\033[1;0;92m INFO    \033[0m\033[92m >>>\033[0m ",
             "\033[1;0;94m DEBUG   \033[0m\033[94m >>>\033[0m "
         };
-#else
-        /**< Log/level tags to use when color is disabled */
+
         static const char * level_strings[] = {
             nullptr,
             nullptr,
@@ -61,19 +58,18 @@ namespace logging
             "[DEBUG  ] ",
         };
 
-#endif /* end LOGGING_COLORED */
+        if (::isatty(::fileno(stderr)))
+            std::fprintf(stderr, "%s", level_strings_colored[L]);
+        else
+            std::fprintf(stderr, "%s", level_strings[L]);
 
-        std::fprintf(stderr, "%s", level_strings[L]);
         std::vfprintf(stderr, format, args);
         
         auto l = std::strlen(format);
         
-        /* revisit this -ac XXX TODO */
+        /* handle automatic newlines as syslog does */
         if (l > 0 && format[l-1] != '\n')
-        {
-            /* handle automatic newlines as syslog does */
             std::fprintf(stderr,"\n");
-        }
     }
 }
 

@@ -20,7 +20,7 @@ int main(void)
     
     write_log<CRIT>("Log level = %d", runtime_log_level);
     write_log<INFO>("%s test", "INFO");
-    write_log<WARNING>("%s test", "WARNING");
+    write_log<WARNING>("%s test\n\n", "WARNING");
  
     /* should not see these in either mode - runtime or compile time */
     write_log<DEBUG>("%s test", "DEBUG - should not see this");
