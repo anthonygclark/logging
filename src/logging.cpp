@@ -23,7 +23,7 @@ namespace logging
 #undef DEFAULT_LOG_LEVEL
 }
 
-/* Loaf the logging implementation here. Each 
+/* Load the logging implementation here. Each 
  * impl file must define the functions in namespace
  * logging. This technique will limit the resolution
  * of write_log. Meaning, if you have some compiled code

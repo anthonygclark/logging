@@ -1,4 +1,3 @@
-
 #include "logging.hh"
 
 using namespace logging;
@@ -24,4 +23,10 @@ int main(void)
  
     /* should not see these in either mode - runtime or compile time */
     write_log<DEBUG>("%s test", "DEBUG - should not see this");
+
+    for (int i = 0; i < 50; ++i)
+    {
+        write_log<CRIT>("Logging test %d\n", i);
+        write_log<WARNING>("Logging test %d\n", i);
+    }
 }

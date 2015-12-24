@@ -35,16 +35,18 @@ namespace logging
      */
     void logging_impl_function(LogLevel L, const char * format, va_list args)
     {
+        static std::FILE * logging_file = stderr;
+
         /* NOTE avoid using designated initializers when using gcc */
         static const char * level_strings_colored[] = {
             nullptr,
             nullptr,
-            "\033[1;0;91m CRIT    \033[0m\033[91m >>>\033[0m ",
+            "\033[1;0;91mCRIT    \033[0m\033[91m >>>\033[0m ",
             nullptr,
-            "\033[1;0;93m WARNING \033[0m\033[93m >>>\033[0m ",
+            "\033[1;0;93mWARNING \033[0m\033[93m >>>\033[0m ",
             nullptr,
-            "\033[1;0;92m INFO    \033[0m\033[92m >>>\033[0m ",
-            "\033[1;0;94m DEBUG   \033[0m\033[94m >>>\033[0m "
+            "\033[1;0;92mINFO    \033[0m\033[92m >>>\033[0m ",
+            "\033[1;0;94mDEBUG   \033[0m\033[94m >>>\033[0m "
         };
 
         static const char * level_strings[] = {
@@ -58,18 +60,18 @@ namespace logging
             "[DEBUG  ] ",
         };
 
-        if (::isatty(::fileno(stderr)))
-            std::fprintf(stderr, "%s", level_strings_colored[L]);
+        if (::isatty(::fileno(logging_file)))
+            std::fprintf(logging_file, "%s", level_strings_colored[L]);
         else
-            std::fprintf(stderr, "%s", level_strings[L]);
+            std::fprintf(logging_file, "%s", level_strings[L]);
 
-        std::vfprintf(stderr, format, args);
+        std::vfprintf(logging_file, format, args);
         
-        auto l = std::strlen(format);
+        auto const l = std::strlen(format);
         
         /* handle automatic newlines as syslog does */
         if (l > 0 && format[l-1] != '\n')
-            std::fprintf(stderr,"\n");
+            std::fprintf(logging_file,"\n");
     }
 }
 
