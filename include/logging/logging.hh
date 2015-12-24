@@ -8,8 +8,6 @@ namespace logging
     extern int runtime_log_level;
 }
 
-
-
 /* Load the header for the type of logging allowed.
  * This is going to be weird if mulitple sources/libs
  * a different type - as in, write_log calls may not

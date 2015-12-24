@@ -6,7 +6,7 @@ CXXFLAGS = --std=c++11 -Wall -Wextra -Werror
 CPPFLAGS  = -DDEFAULT_LOG_LEVEL=7
 
 # default for demo
-CPPFLAGS += -DLOGGING_RUNTIME -DLOGGING_STDIO -DLOGGING_COLORED
+CPPFLAGS += -DLOGGING_RUNTIME -DLOGGING_STDIO
 
 # Change this
 CPPFLAGS += -DLOGGING_IDENTIFIER="logging_test"  
@@ -22,17 +22,16 @@ prep:
 all: prep $(OBJECTS)
 
 obj/%.o : src/%.cpp
-	@echo [CXX ] $<
+	@echo "[CXX ] $<"
 	@$(CXX) $(CXXFLAGS) $(CFLAGS) $< -c -o $@ $(CPPFLAGS)
 
 lib: $(OBJECTS)
-	@echo [LIB ] obj/liblogging_runtime_stdio.a
+	@echo "[LIB ] obj/liblogging_runtime_stdio.a"
 	@ar rcs obj/liblogging_runtime_stdio.a $(OBJECTS)
 
 test_run: lib
-	@echo [TEST] $@
+	@echo "[TEST] $@"
 	@$(CXX) $(CXXFLAGS) $(CFLAGS) test/test.cpp obj/liblogging_runtime_stdio.a -o $@ $(CPPFLAGS)
-
 
 clean:
 	@rm -rf obj 

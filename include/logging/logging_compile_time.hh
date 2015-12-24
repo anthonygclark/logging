@@ -8,7 +8,6 @@
 
 namespace logging
 {
-
 #ifndef DEFAULT_LOG_LEVEL
 #define DEFAULT_LOG_LEVEL 7
 #endif

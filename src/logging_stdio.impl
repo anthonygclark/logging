@@ -33,7 +33,7 @@ namespace logging
      * @param format The format string (printf style)
      * @param args The log arguments (values)
      */
-    void logging_impl_function(LogLevel L, const char * format, va_list args)
+    void __attribute__ ((noinline)) logging_impl_function(LogLevel L, const char * format, va_list args)
     {
         static std::FILE * logging_file = stderr;
 

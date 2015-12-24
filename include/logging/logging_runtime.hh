@@ -16,15 +16,11 @@ namespace logging
     template<enum LogLevel L>
         void write_log(const char * format, ...)
         {
+            /* simple check against log level */
+            if (L > runtime_log_level) return;
+            
             va_list args;
             va_start(args, format);
-
-            /* simple check against log level */
-            if (L > runtime_log_level)
-            {
-                va_end(args);
-                return;
-            }
 
             logging_impl_function(L, format, args);
             va_end(args);

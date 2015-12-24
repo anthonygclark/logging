@@ -5,7 +5,13 @@
 
 namespace logging
 {
-    /* mirrors syslog */
+    /**
+     * \enum LogLevel
+     * @details Log Level enum. This is not an enum
+     *          class intentionally.
+     * @note This must mirror syslog or must contain
+     *       the syslog members.
+     */
     enum LogLevel
     {
         CRIT    = 2,
@@ -34,6 +40,7 @@ namespace logging
      * @param L The log level to log against
      * @param format printf-style formatting (implementation defined)
      * @param args The arguments to the format (implementation defined)
+     * @note This is defined for each implementation
      */
     void logging_impl_function(LogLevel L, const char * format, va_list args);
 }
