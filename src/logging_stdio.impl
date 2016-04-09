@@ -37,6 +37,7 @@ namespace logging
     {
         static std::FILE * logging_file = stderr;
 
+#ifdef LOGGING_ENABLE_COLORS
         /* NOTE avoid using designated initializers when using gcc */
         static const char * level_strings_colored[] = {
             nullptr,
@@ -48,7 +49,7 @@ namespace logging
             "\033[1;0;92mINFO    \033[0m\033[92m >>>\033[0m ",
             "\033[1;0;94mDEBUG   \033[0m\033[94m >>>\033[0m "
         };
-
+#endif
         static const char * level_strings[] = {
             nullptr,
             nullptr,
@@ -60,11 +61,16 @@ namespace logging
             "[DEBUG  ] ",
         };
 
-        if (::isatty(::fileno(logging_file)))
+#ifdef LOGGING_ENABLE_COLORS
+        if (::isatty(::fileno(logging_file))) {
             std::fprintf(logging_file, "%s", level_strings_colored[L]);
-        else
+        }
+        else {
             std::fprintf(logging_file, "%s", level_strings[L]);
-
+        }
+#else
+        std::fprintf(logging_file, "%s", level_strings[L]);
+#endif
         std::vfprintf(logging_file, format, args);
         
         auto const l = std::strlen(format);

@@ -18,7 +18,7 @@ namespace logging
         {
             /* simple check against log level */
             if (L > runtime_log_level) return;
-            
+
             va_list args;
             va_start(args, format);
 

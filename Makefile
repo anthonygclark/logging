@@ -1,20 +1,18 @@
-CXX      = clang++
-CFLAGS   = -I include/logging
-CXXFLAGS = --std=c++11 -Wall -Wextra -Werror
-
-# default to the max log level
-CPPFLAGS  = -DDEFAULT_LOG_LEVEL=7
+CXX      ?= clang++
+CFLAGS   ?= -I include/logging
+CXXFLAGS ?= --std=c++11 -Wall -Wextra -Werror
 
 # default for demo
-CPPFLAGS += -DLOGGING_RUNTIME -DLOGGING_STDIO
+CPPFLAGS ?= -DDEFAULT_LOG_LEVEL=7 -DLOGGING_RUNTIME -DLOGGING_STDIO -DLOGGING_IDENTIFIER="logging_test"  
 
-# Change this
-CPPFLAGS += -DLOGGING_IDENTIFIER="logging_test"  
+ifndef CPPFLAGS
+$(error CPPFLAGS not set, this is how this library functions)
+endif
 
 SRCS     = src/logging.cpp
 OBJECTS  = obj/logging.o
 
-all: prep lib test_run
+all: prep liblogging.a test_run
 
 prep:
 	@mkdir -p obj
@@ -25,13 +23,13 @@ obj/%.o : src/%.cpp
 	@echo "[CXX ] $<"
 	@$(CXX) $(CXXFLAGS) $(CFLAGS) $< -c -o $@ $(CPPFLAGS)
 
-lib: $(OBJECTS)
-	@echo "[LIB ] obj/liblogging_runtime_stdio.a"
-	@ar rcs obj/liblogging_runtime_stdio.a $(OBJECTS)
+liblogging.a: $(OBJECTS)
+	@echo "[LIB ] $@"
+	@ar rcs $@ $(OBJECTS)
 
-test_run: lib
+test_run: liblogging.a
 	@echo "[TEST] $@"
-	@$(CXX) $(CXXFLAGS) $(CFLAGS) test/test.cpp obj/liblogging_runtime_stdio.a -o $@ $(CPPFLAGS)
+	@$(CXX) $(CXXFLAGS) $(CFLAGS) test/test.cpp liblogging.a -o $@ $(CPPFLAGS)
 
 clean:
 	@rm -rf obj 

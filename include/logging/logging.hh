@@ -18,7 +18,7 @@ namespace logging
 #elif defined (LOGGING_RUNTIME)
     #include "logging_runtime.hh"
 #else
-    #error "No logging pattern defined"
+    #error "No logging pattern defined, see logging.hh"
 #endif
 
 #endif /* guard */

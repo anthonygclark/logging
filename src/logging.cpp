@@ -35,5 +35,5 @@ namespace logging
 #elif defined (LOGGING_STDIO)
     #include "logging_stdio.impl"
 #else
-    #error "No logging implementation defined"
+    #error "No logging implementation defined, see logging.cpp"
 #endif

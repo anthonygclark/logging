@@ -15,12 +15,16 @@ namespace logging
     enum LogLevel
     {
         CRIT    = 2,
+        CRITICAL= CRIT,
+        ERR     = 3,
+        ERROR   = ERR,
         WARNING = 4,
+        WARN    = WARNING,
         INFO    = 6,
         DEBUG   = 7,
         LAST    = DEBUG,
     };
-    
+
     /**
      * @brief Initialized the logging system.
      * @note This is defined for each implementation

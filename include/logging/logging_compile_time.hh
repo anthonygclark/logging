@@ -9,7 +9,7 @@
 namespace logging
 {
 #ifndef DEFAULT_LOG_LEVEL
-#define DEFAULT_LOG_LEVEL 7
+#define DEFAULT_LOG_LEVEL (7)
 #endif
     /**< Log level to use when compile-time logging is
      * used */
@@ -47,7 +47,7 @@ namespace logging
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-    
+
     template<enum LogLevel L>
         typename std::enable_if<(compile_time_log_level < L), void>::type
         write_log(const char * format, va_list args)
