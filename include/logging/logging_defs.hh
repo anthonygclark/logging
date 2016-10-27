@@ -2,9 +2,11 @@
 #define LOGGING_DEFS_H 1
 
 #include <cstdarg>
+#include "macros.h"
 
-namespace logging
+namespace NAMESPACE
 {
+    
     /**
      * \enum LogLevel
      * @details Log Level enum. This is not an enum
@@ -23,6 +25,12 @@ namespace logging
         INFO    = 6,
         DEBUG   = 7,
         LAST    = DEBUG,
+    };
+
+    enum LogMode
+    {
+        RUNTIME = 0,
+        COMPILETIME = 1
     };
 
     /**

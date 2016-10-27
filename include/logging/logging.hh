@@ -3,9 +3,11 @@
 
 #include "logging_defs.hh"
 
-namespace logging
+namespace NAMESPACE
 {
     extern int runtime_log_level;
+    extern int compiletime_log_level;
+    extern LogMode log_mode;
 }
 
 /* Load the header for the type of logging allowed.
@@ -13,12 +15,12 @@ namespace logging
  * a different type - as in, write_log calls may not
  * resolve.
  */
-#if defined (LOGGING_COMPILE_TIME)
-    #include "logging_compile_time.hh"
+#if defined (LOGGING_COMPILETIME)
+#include "logging_compile_time.hh"
 #elif defined (LOGGING_RUNTIME)
-    #include "logging_runtime.hh"
+#include "logging_runtime.hh"
 #else
-    #error "No logging pattern defined, see logging.hh"
+#error "No logging pattern defined, see logging.hh"
 #endif
 
 #endif /* guard */

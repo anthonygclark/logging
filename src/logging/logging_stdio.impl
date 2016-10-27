@@ -4,18 +4,21 @@
 
 #include <unistd.h> /* isatty */
 
-#include "logging_defs.hh"
+#include "logging/logging_defs.hh"
 
-namespace logging
+namespace NAMESPACE
 {
+    /**< Application tag */
+    static const char * logging_identifier = xstr(LOGGING_IDENTIFIER);
+
     /**
      * @brief Initializer for STDIO logging
      * @details Does nothing
      */
     void init_logging()
     { 
-        write_log<DEBUG>("STDIO logging Initialized with log level %d",
-                         runtime_log_level);
+        write_log<DEBUG>("stdio logging Initialized with log level %d for module '%s'",
+                         runtime_log_level, logging_identifier);
     }
 
     /**
@@ -63,13 +66,13 @@ namespace logging
 
 #ifdef LOGGING_ENABLE_COLORS
         if (::isatty(::fileno(logging_file))) {
-            std::fprintf(logging_file, "%s", level_strings_colored[L]);
+            std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings_colored[L]);
         }
         else {
-            std::fprintf(logging_file, "%s", level_strings[L]);
+            std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings[L]);
         }
 #else
-        std::fprintf(logging_file, "%s", level_strings[L]);
+        std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings[L]);
 #endif
         std::vfprintf(logging_file, format, args);
         

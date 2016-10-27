@@ -1,4 +1,4 @@
-#include "logging.hh"
+#include "logging/logging.hh"
 
 namespace
 {
@@ -11,16 +11,20 @@ namespace
     { return (x > y) ?  y : x; }
 }
 
-namespace logging
+namespace NAMESPACE
 {
-    /* Set the default log level unless specified */
 #ifndef DEFAULT_LOG_LEVEL
-    #define DEFAULT_LOG_LEVEL 7
+#define DEFAULT_LOG_LEVEL (7)
 #endif
-    
+    int compiletime_log_level = DEFAULT_LOG_LEVEL;
     int runtime_log_level = _min(LogLevel::LAST, DEFAULT_LOG_LEVEL);
-
 #undef DEFAULT_LOG_LEVEL
+
+#if defined (LOGGING_COMPILETIME)
+    LogMode log_mode = COMPILETIME;
+#elif defined (LOGGING_RUNTIME)
+    LogMode log_mode = RUNTIME;
+#endif
 }
 
 /* Load the logging implementation here. Each 
@@ -31,9 +35,9 @@ namespace logging
  * the results are undefined.
  */
 #if defined (LOGGING_SYSLOG)
-    #include "logging_syslog.impl"
+#include "logging_syslog.impl"
 #elif defined (LOGGING_STDIO)
-    #include "logging_stdio.impl"
+#include "logging_stdio.impl"
 #else
-    #error "No logging implementation defined, see logging.cpp"
+#error "No logging implementation defined, see logging.cc"
 #endif

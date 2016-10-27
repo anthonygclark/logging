@@ -5,7 +5,7 @@
 #include <cstdio>
 #include "logging_defs.hh"
 
-namespace logging
+namespace NAMESPACE
 {
     /**
      * @brief write_log implementation for runtime logging

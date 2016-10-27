@@ -6,14 +6,15 @@
 
 #include "logging_defs.hh"
 
-namespace logging
+namespace NAMESPACE
 {
+    /* TODO we're doing this twice to make it constexpr
+     * Can we do extern constexpr? 
+     */
 #ifndef DEFAULT_LOG_LEVEL
 #define DEFAULT_LOG_LEVEL (7)
 #endif
-    /**< Log level to use when compile-time logging is
-     * used */
-    constexpr static int compile_time_log_level = DEFAULT_LOG_LEVEL;
+    constexpr static int compiletime_log_level_constexpr = DEFAULT_LOG_LEVEL;
 #undef DEFAULT_LOG_LEVEL
 
     /**
@@ -23,7 +24,7 @@ namespace logging
      * @param args The format arguments
      */
     template<enum LogLevel L>
-        typename std::enable_if<(compile_time_log_level >= L), void>::type
+        typename std::enable_if<(compiletime_log_level_constexpr >= L), void>::type
         write_log(const char * format, va_list args)
         {
             logging_impl_function(L, format, args);
@@ -36,7 +37,7 @@ namespace logging
      * @param ... The format arguments
      */
     template<enum LogLevel L>
-        typename std::enable_if<(compile_time_log_level >= L), void>::type
+        typename std::enable_if<(compiletime_log_level_constexpr >= L), void>::type
         write_log(const char * format, ...)
         {
             va_list args;
@@ -49,14 +50,14 @@ namespace logging
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
     template<enum LogLevel L>
-        typename std::enable_if<(compile_time_log_level < L), void>::type
+        typename std::enable_if<(compiletime_log_level_constexpr < L), void>::type
         write_log(const char * format, va_list args)
         {
             /* Intentionally left black for SFINAE */
         }
 
     template<enum LogLevel L>
-        typename std::enable_if<(compile_time_log_level < L), void>::type
+        typename std::enable_if<(compiletime_log_level_constexpr < L), void>::type
         write_log(const char * format, ...)
         {
             /* Intentionally left black for SFINAE */
