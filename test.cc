@@ -27,9 +27,6 @@ int main(void)
     bool res = log_mode == RUNTIME && runtime_log_level >= DEBUG;
     res = log_mode || (log_mode == COMPILETIME && compiletime_log_level >= DEBUG);
 
-
-    return 0;
-
     write_log<DEBUG>("DEBUG - Should you see this? %s",
                      res ? "yes" : "no");
 

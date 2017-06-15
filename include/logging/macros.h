@@ -1,4 +1,3 @@
-
 #if !defined(LOGGING_IDENTIFIER)
 #error "Must define LOGGING_IDENTIFIER for module to deduce namespace"
 #endif
@@ -9,4 +8,3 @@
 
 #define xstr(s) str(s)
 #define str(s) #s
-

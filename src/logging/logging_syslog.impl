@@ -23,11 +23,8 @@ namespace NAMESPACE
 
         std::call_once(log_initialized, 
                        [] {
-                            ::openlog(logging_identifier,
-                                      LOG_PERROR | 
-                                      LOG_NOWAIT | 
-                                      LOG_NDELAY | 
-                                      LOG_PID, 0);
+                            ::openlog(logging_identifier, LOG_PERROR | LOG_NOWAIT | 
+                                      LOG_NDELAY | LOG_PID, 0);
 
                             ::setlogmask(LOG_UPTO(runtime_log_level));
                             write_log<DEBUG>("Syslog Initialized with log level %d for module '%s'",

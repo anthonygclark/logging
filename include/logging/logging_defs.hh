@@ -6,13 +6,10 @@
 
 namespace NAMESPACE
 {
-    
     /**
      * \enum LogLevel
-     * @details Log Level enum. This is not an enum
-     *          class intentionally.
-     * @note This must mirror syslog or must contain
-     *       the syslog members.
+     * @details Log Level enum. This is not an enum class intentionally.
+     * @note This must mirror syslog or must contain the syslog members.
      */
     enum LogLevel
     {

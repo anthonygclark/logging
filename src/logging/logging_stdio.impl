@@ -16,7 +16,7 @@ namespace NAMESPACE
      * @details Does nothing
      */
     void init_logging()
-    { 
+    {
         write_log<DEBUG>("stdio logging Initialized with log level %d for module '%s'",
                          runtime_log_level, logging_identifier);
     }
@@ -32,11 +32,11 @@ namespace NAMESPACE
 
     /**
      * @brief Implementation for stdio logging
-     * @param L The log level to log 
+     * @param L The log level to log
      * @param format The format string (printf style)
      * @param args The log arguments (values)
      */
-    void __attribute__ ((noinline)) logging_impl_function(LogLevel L, const char * format, va_list args)
+    void __attribute__((noinline)) logging_impl_function(LogLevel L, const char * format, va_list args)
     {
         static std::FILE * logging_file = stderr;
 
@@ -65,23 +65,21 @@ namespace NAMESPACE
         };
 
 #ifdef LOGGING_ENABLE_COLORS
-        if (::isatty(::fileno(logging_file))) {
-            std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings_colored[L]);
-        }
-        else {
-            std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings[L]);
-        }
+        std::fprintf(logging_file, "[%-8s] %s", logging_identifier,
+                     ::isatty(::fileno(logging_file)) ? level_strings_colored[L] : level_strings[L]);
 #else
         std::fprintf(logging_file, "[%-8s] %s", logging_identifier, level_strings[L]);
 #endif
+
         std::vfprintf(logging_file, format, args);
-        
+
         auto const l = std::strlen(format);
-        
+
         /* handle automatic newlines as syslog does */
         if (l > 0 && format[l-1] != '\n')
             std::fprintf(logging_file,"\n");
     }
 }
 
-// vim: ft=cpp
+
+/* vim: ft=cpp */
