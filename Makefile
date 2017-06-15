@@ -54,11 +54,11 @@ endef
 
 # exapand function, creates rules
 $(eval $(call LOGGING, test1, LOGGING_RUNTIME, LOGGING_STDIO, yes))
-#$(eval $(call LOGGING, test2, LOGGING_COMPILETIME, LOGGING_STDIO, yes))
-#$(eval $(call LOGGING, test3, LOGGING_RUNTIME, LOGGING_SYSLOG, no))
-#$(eval $(call LOGGING, test4, LOGGING_COMPILETIME, LOGGING_SYSLOG, yes))
+$(eval $(call LOGGING, test2, LOGGING_COMPILETIME, LOGGING_STDIO, yes))
+$(eval $(call LOGGING, test3, LOGGING_RUNTIME, LOGGING_SYSLOG, no))
+$(eval $(call LOGGING, test4, LOGGING_COMPILETIME, LOGGING_SYSLOG, yes))
 
-all: test1 
+all: test1 test2 test3 test4
 	
 test1: logging_test1 lib/liblogging_test1.a
 	$(CXX) $(CXXFLAGS) $(CFLAGS) test.cc $(LOGGING_TEST1_CFLAGS) -lpthread $(LOGGING_TEST1_LIB) $(LOGGING_TEST1_CPPFLAGS) -o test_1
